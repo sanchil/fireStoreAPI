@@ -3,16 +3,24 @@
 fireStoreAPI is a simple nodejs db package API for accessing records in 
 google firestore data base.
 
-
 ## Getting Started
 
-Please note that you must have a valid credentials by the way of a 
-security account file json key in you application. 
-
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment section for notes on how to deploy the project on a live system.
 
 ### Prerequisites and setting up your environment
 
-What things you need to install the software and how to install them
+Artifacts you need to install the software and how to install them
+
+### 1. firestore account on google
+      
+### 2. vm on google
+### 3. nodejs platform
+  * Test Environement: JEST
+  * Code Transpiler: Babel
+  * Node monitor: nodemon
+### 4. docker latest
+### 7. vs code/vim or just any editor you like
+    With all the necessary plugins to handle various types of files such as yaml, javacript, Dockerfiles etc
 
 #### create firestore account
 
@@ -53,27 +61,95 @@ ls -l
 cat key_file_name>.json
 ```
 
+## Installation 
 
-## Installation via Docker file.
+### Artifacts
 
-Run the db package and companion package via a docker file.
+There is one artifact in this package:
 
-Download the docker file and presuming that docker environment has been set up locally.
+1. fireStoreAPI
+   An api package to write, read one and read many records  
+  
+3. Dockerfiles
+  1. Dockerfile # To build the nicejob companion package and the fireStoreAPI package
+  
+### Environment
+
+Makes use of no enviroment variables. The variables will be picked by the companion applcation.
+
+### via Docker files.
+
+Run the following commands on local docker environment. nicejob runs on port 3000 in the container. 
+
+#### Create a dedicated network redis-net, for nodeapp and redis to run on. 
 
 ```bash
-docker build -t sanchil/nicejob .
-
-docker run --name nodeapp -dp 4000:3000 \
-  -e GOOGLE_APPLICATION_CREDENTIALS=<key_file_name>.json \
-  -e USERS=<collection> \
-  -e NODE_ENV=prod \
-  sanchil/nicejob
+docker network create --driver bridge redis-net
 ```
+
+#### Pull image for nodeapp the companion application and fireStoreAPI DB package
+
+```bash
+docker pull sanchil/nicejob:1.3
+```
+
+**Note**  
+
+Create the network first, then deploy the cache and finally the expressjs application nodeapp.
+
+
+
+#### Start nodeapp application.
+
+```bash
+docker run --name nodeapp -dp 3000:3000 \
+  --network redis-net \
+  -e GOOGLE_APPLICATION_CREDENTIALS=nicejob_key.json \
+  -e USERS=Users \
+  -e NODE_ENV=prod \
+  -e REDIS_HOST=redis \
+  -e REDIS_PORT=6379 \
+  sanchil/nicejob:1.3
+```
+
+**Note**  
+
+fireStoreAPI and nicejob companion application have been merged into a single image named nodeapp. cache is a separate image to handle serverside caching.
+Please ensure the host ports are mapped correctly to the container ports of node:3000 and redis:6379
+
+
+### Alternatively, build local images via Docker files.
+
+You may also build the images locally via the docker files located inside the packages. 
+
+Dockerfiles
+1> Dockerfile # for building nicejob companion app and fireStoreAPI db packages
+Run the db package and companion package via a docker file.
+
+Run the docker build command from the parent folders of nicejob and fireStoreAPI
+
+<root>
+      + nicejob/Dockerfile
+      + fireStoreAPI
+
+from <root> folder run the following two build commands. This is necessary for Dockerfile to build a combined image, but optional for building redis cache.
+      commands to run these images are same as above
+
+Create redis-net network first
+      
+```bash
+docker network create --driver bridge redis-net
+```
+Build nodeapp
+
+```bash
+docker build -t sanchil/nicejob:1.3 -f nice/job/Dockerfile .
+```
+
 #### to stop the application  
 ```bash
 docker stop nodeapp
 ```
-
 #### force stop and remove the application  
 ```bash
 docker rm -f nodeapp
@@ -81,42 +157,50 @@ docker rm -f nodeapp
 
 Access the application on http://localhost:4000.
 
-## Manual Installation and Setup.
+To do a quick check run the curl commmands listed under the test section.
+
+### Manual Installation and Setup.
+
+#### For building the fireStoreAPI
 
 ```bash
-
-npx express-generator --git --no-view nicejob
-cd nicejob
-npm i --save @google-cloud/firestore
-npm i --save dotenv nanoid
-npm i --save-dev @babel/cli @babel/core @babel/node @babel/preset-env 
-npm i --save-dev nodemon rimraf
-npm i --save-dev jest
-
+mkdir fireStore
+cd fireStore
+npm init -y
+npm i --save @google-cloud/firestore dotenv
 ```
-
 
 
 ## Usage
 
-To start the application change into nicejob app directory and run the following command.
+To start the application change into nicejob app directory and run the following command. The cleans builds and runs
 
 ```bash
 
 npm run start:prod
 
 ```
+
 To clean and build separately run the following two commands.
 
 ```bash
-
 npm run clean
 npm run build
+```
+
+To run the tests.
+
+Please appropriate modifications to the __test__/getrecords.test.js file to reflect the correct firestore value. It checks for a first_name of a particular record.
+
+```bash
+
+npm run test
 
 ```
 
-### The access the services
+## Tests
 
+### The access the services via curl
 
 ##### readOne
 
@@ -144,28 +228,6 @@ To update a record
 curl -X POST -H "Content-Type:application/json" http://localhost:3000/:collection/:id
 ```
 
-
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
 Explain how to run the automated tests for this system
 
 ### Break down into end to end tests
@@ -183,10 +245,17 @@ Explain what these tests test and why
 ```
 Give an example
 ```
+## Access
+
+Create an instance template with a random docker image say for eg nginx. This is only to create a dockerized instance.
+Do not use sanchil/cache:1.0 or sanchil/nicejob:1.3 as these needed to be bound to the manually created network of redis-net
+Google cloud instances and instance template.
+
+Note the ip addresses of the instances.
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Once logged into the VM instances pull the docker images as per the instructions above and run them. Test them with curl commands.
 
 ## Built With
 
@@ -200,7 +269,7 @@ Add additional notes about how to deploy this on a live system
 
 ## Contributing
 
-Please read [CONTRIBUTING.md]for details on our code of conduct, and the process for submitting pull requests to us.
+
 
 ## Versioning
 
@@ -209,18 +278,10 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## Authors
 
 * **Sandeep L Chiluveru** - 
-
-## License
-
+* [ sandeepnet@aol.com ]
 
 ## Acknowledgments
 
-
-
-
-
-
-
-
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
