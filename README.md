@@ -32,11 +32,14 @@ If:
    database is via a service account. 
    You may create a service account via gcloud tool or a REST url and running the following commands.
    
-   Ref: https://cloud.google.com/iam/docs/creating-managing-service-accounts
-        https://github.com/googleapis/google-api-nodejs-client
+   Ref:  
+         https://cloud.google.com/iam/docs/creating-managing-service-accounts   
+         https://github.com/googleapis/google-api-nodejs-client
  
    Have following information:
-   service account email id: <SA_NAME>@<PROJECT_ID>.iam.gserviceaccount.com
+   
+   **service account email id**: <SA_NAME>@<PROJECT_ID>.iam.gserviceaccount.com
+   
    You also provide the following information when you create a service account:
 
     - SA_DESCRIPTION is an optional description for the service account.
@@ -44,11 +47,11 @@ If:
     - PROJECT_ID is the ID of your Google Cloud project.
 
    A REST command
-    ```sh
+   
        POST https://iam.googleapis.com/v1/projects/PROJECT_ID/serviceAccounts
-    ```
+   
    Request JSON body:
-   ```sh    
+   
         {
             "accountId": "SA_NAME",
             "serviceAccount": {
@@ -56,8 +59,7 @@ If:
                                     "displayName": "SA_DISPLAY_NAME"
                     }
         }
-    ```
-
+   
 There multiple other ways that one may explore on google link provided above. The simplest
 option is to go your project dashboard follow the instructions and have a service account created. After creation of your project service account get it as a json file. This file needs to stored in env variable ***GOOGLE_APPLICATION_CREDENTIALS***=/<path>/<to>/<SA>_key.json. For nodejs projects the best option is to use dotenv package and store it .env file. 
 
@@ -72,13 +74,22 @@ And that is how database constructor below knows to connect to your database wit
 If:
     You have need using your access tokens for posting rest urls, then the following will help you get there.
 
-    ```sh 
+command line tool:
+
+
+```sh
         gcloud auth application-default print-access-token
-    ```
+   
+```
+   
 
-    or
 
-    ```js
+or
+
+NodeJs function: 
+
+
+```js  
 
     const { JWT } = require('google-auth-library');
 
@@ -102,7 +113,7 @@ If:
 
     }
 
-    ``` 
+```
 
 ## Constructor
 
