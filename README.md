@@ -61,7 +61,7 @@ If:
         }
    
 There multiple other ways that one may explore on google link provided above. The simplest
-option is to go your project dashboard follow the instructions and have a service account created. After creation of your project service account get it as a json file. This file needs to stored in env variable ***GOOGLE_APPLICATION_CREDENTIALS***=/<path>/<to>/<SA>_key.json. For nodejs projects the best option is to use dotenv package and store it .env file. 
+option is to go your project dashboard follow the instructions and have a service account created. After creation of your project service account get it as a json file. This file needs to stored in env variable ***GOOGLE_APPLICATION_CREDENTIALS***=/path/to/SA_key.json. For nodejs projects the best option is to use dotenv package and store it .env file. 
 
 Pass this as an env var to docker run command if being used for a docker image.
 
@@ -156,7 +156,7 @@ When retrieving data, if the cache-matched data was added more than `cache_max_a
 Following is a sample code used in express js. The fire-store-api is used by controllers
 which are linked to routes via a standard route file.
 
-##### <approot>/src/controllers/index.js
+##### /approot/src/controllers/index.js
 
 ####################################################################################
 
@@ -177,9 +177,9 @@ const db = new Database();
 
 const basicContrl = (req, res, next) => {
     console.log("Url: ", req.url);
-    res.locals.data = { "hello": "world !!!" };
-    next();
-    //res.json({ "hello": "world !!!" });
+    //res.locals.data = { "hello": "world !!!" };
+    //next();
+    res.json({ "hello": "world !!!" });
 
 }
 
@@ -191,9 +191,9 @@ const readOneCtrl = (req, res, next) => {
         db.readOne(req.params)
             .then((doc) => {
                 if (doc.exists) {
-                    res.locals.data = doc.data();
-                    next();
-                    //res.json(doc.data());
+                    //res.locals.data = doc.data();
+                    //next();
+                    res.json(doc.data());
                 } else {
 
                     console.log("No such document!");
@@ -228,9 +228,9 @@ const readManyCtrl = (req, res, next) => {
                 })
             })
             .then(() => {
-                res.locals.data = arr;
-                next();
-                //res.json(arr);
+                //res.locals.data = arr;
+                //next();
+                res.json(arr);
             })
             .catch(err => {
                 console.log(err);
@@ -306,7 +306,7 @@ module.exports = {
 
 ####################################################################################
 
-##### <approot>/src/routes/index.js
+##### /approot/src/routes/index.js
 
 ```js
 var express = require('express');
