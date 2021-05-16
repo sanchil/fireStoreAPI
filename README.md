@@ -349,6 +349,17 @@ module.exports = router;
 * [Git](https://github.com/) - Version Control
 * [Firestore](https://cloud.google.com/firestore) - Database
 
+## Links
+
+https://www.npmjs.com/package/@google-cloud/firestore
+
+https://github.com/sanchil/fireStoreAPI
+
+https://www.npmjs.com/package/fire-store-api
+
+https://cloud.google.com/iam/docs/creating-managing-service-accounts   
+
+https://github.com/googleapis/google-api-nodejs-client
 
 ## Contributing
 
