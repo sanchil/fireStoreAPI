@@ -1,0 +1,21 @@
+{
+  "name": "fire-store-api",
+  "version": "1.0.11",
+  "description": "This is an API for making read and write calls to a Firestore DB instance ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Fire",
+    "Store",
+    "API"
+  ],
+  "author": "Sandeep L Chiluveru",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/firestore": "^4.11.0",
+    "dotenv": "^9.0.2",
+    "nanoid": "^3.1.23"
+  }
+}
