@@ -6,11 +6,11 @@ AIzaSyC_vnEq_M-KsGi9bCfn-kohYYaaPeo2YNs
 # for retrieving a custom token
 https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=[API_KEY]
 
-https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=AIzaSyC_vnEq_M-KsGi9bCfn-kohYYaaPeo2YNs
+https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=[API_KEY]
 
 
 # for using the custom token
-curl 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=AIzaSyC_vnEq_M-KsGi9bCfn-kohYYaaPeo2YNs' \
+curl 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=[API_KEY]' \
 -H 'Content-Type: application/json' \
 --data-binary '{"token":"[CUSTOM_TOKEN]","returnSecureToken":true}
 
