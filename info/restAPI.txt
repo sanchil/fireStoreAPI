@@ -1,7 +1,7 @@
 ### Google API Calls ################################################
 # https://firebase.google.com/docs/reference/rest/auth/
 
-AIzaSyC_vnEq_M-KsGi9bCfn-kohYYaaPeo2YNs
+
 
 # for retrieving a custom token
 https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=[API_KEY]
